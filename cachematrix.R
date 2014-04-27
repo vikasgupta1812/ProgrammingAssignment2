@@ -13,6 +13,7 @@ makeCacheMatrix <- function(x = matrix()) {
   get  <- function() x
   # Identify the inverse of a matrix by using function solve()
   setInverse  <- function(solve) inverseOfx  <<- solve
+  
   getInverse  <- function() inverseOfx
   list(
     set = set,
@@ -29,7 +30,7 @@ cacheSolve <- function(x, ...) {
   # Obtain the cached value. 
   inverseOfx  <- x$getInverse()
   # If cache is found, then return the cached value and skip the calculation
-  is(!is.null(inverseOfx)) {
+  if(!is.null(inverseOfx)) {
     message("getting cached data")
     return(inverseOfx)
   }
