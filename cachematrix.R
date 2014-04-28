@@ -23,10 +23,10 @@ makeCacheMatrix <- function(x = matrix()) {
   getInverse  <- function() inverseOfx
   # This is the list of all 4 funcitons defined in the makeCacheMatrix function. These functions can be called form outside to perform different operations, like passing the initial value of matrix, obtaining the value of stored matrix, storing the value of inverse and retreiving the value of cached inverse. 
   list(  
-    set = set,   # Pass the matrix
-    get = get,   # Get back the matrix 
-    setInverse = setInverse,   # Save the value of inverse of matrix 
-    getInverse = getInverse    # Get back the value of inverse of matrix
+    set = set,                  # Pass the matrix
+    get = get,                  # Get back the matrix 
+    setInverse = setInverse,    # Save the value of inverse of matrix 
+    getInverse = getInverse     # Get back the value of inverse of matrix
     )
 }
 
@@ -37,13 +37,12 @@ cacheSolve <- function(x, ...) {
   # Obtain the cached value. 
   inverseOfx  <- x$getInverse()
 
-  if(!is.null(inverseOfx)) {        # If a cache is found
-    message("getting cached data")  # print the message to console 
-    return(inverseOfx)              # return the cache  
+  if(!is.null(inverseOfx)) {              # If a cache is found
+    message("getting cached data")        # print the message to console 
+    return(inverseOfx)                    # return the cache  
   }
   # If cached value is not found 
-  data  <- x$get()
-  inverseOfx  <- solve(x, ...)      # then compute the inverse of a matrix. 
-  x$setInverse()                    # Save the result back to cached Matrix
-  inverseOfx                        # Return the result.
+  inverseOfx  <- solve(x$get(), ...)      # then compute the inverse of a matrix. 
+  x$setInverse(inverseOfx)                # Save the result back to cached Matrix
+  inverseOfx                              # Return the result.
 }
