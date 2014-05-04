@@ -1,0 +1,134 @@
+Title
+========================================================
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring web pages (click the **Help** toolbar button for more details on using R Markdown).
+
+When you click the **Knit HTML** button a web page will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+makeVector <- function(x = numeric()) {
+  m <- NULL
+  set <- function(y) {
+    x <<- y
+    m <<- NULL
+  }
+  get <- function() x
+  setmean <- function(mean) m <<- mean
+  getmean <- function() m
+  list(set = set, get = get,
+       setmean = setmean,
+       getmean = getmean)
+}
+```
+
+```{r}
+cachemean <- function(x, ...) {
+  m <- x$getmean()
+  if(!is.null(m)) {
+    message("getting cached data")
+    return(m)
+  }
+  data <- x$get()
+  m <- mean(data, ...)
+  x$setmean(m)
+  m
+}
+```
+
+
+```{r}
+rm(list = ls())
+```
+
+
+so you when you create a "special vector" using makeVector function, you will get a list
+
+
+```{r}
+a <- makeVector(c(1,2,3))
+```
+
+
+```{r}
+a
+class(a)
+```
+
+```{r}
+a[1]
+class(a[1])
+```
+
+
+```{r}
+a[[1]]
+class(a[[1]])
+```
+
+you may call any of the functions in the list:
+
+```{r}
+class(a$get)
+```
+
+```{r}
+a$get()
+```
+
+this is how function details will be returned if no brackets are used. 
+
+```{r}
+a$get
+```
+
+Passing the values to the function
+```{r}
+a$set(c(4,5,6))
+```
+
+```{r}
+a$get()
+```
+
+
+This is what will be returned if no arguments are passed. 
+
+
+```{r}
+a$set()
+```
+
+Another example function "cacheMean" is just a client function that uses "makeVector" function in its implementation.
+
+The input is expecting a "special vector" made from makeVector (ignore the ... for now).
+The output is the mean coming whether from the special vector's  cache or computation.
+see my comments below:
+
+
+```{r}
+cachemean <- function(x, ...) {
+  m <- x$getmean()           #query the x vector's cache         
+ if(!is.null(m)) {           #if there is a cache
+    message("getting cached data") 
+    return(m)                #just return the cache, no computation needed
+  }
+  data <- x$get()             #if there's no cache
+  m <- mean(data, ...)        #we actually compute them here
+  x$setmean(m)                #save the result back to x's cache
+  m                           #return the result
+}
+```
+
+pass the vector function back to cachemean
+
+```{r}
+b  <- cachemean(a)
+b
+b  <- cachemean(a)
+b
+
+
+```
+
+
+
